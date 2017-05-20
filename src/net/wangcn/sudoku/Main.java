@@ -14,6 +14,10 @@ class Main {
     }
     board.disp();
 
+    Solver solver = new Solver(board);
+    solver.dispScratch();
+    board = solver.solve();
+    solver.dispScratch();
     //todo: Do solving stuff here!
 
     if (board.isSolved()) {

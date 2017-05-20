@@ -54,10 +54,10 @@ public class Board {
   }
 
   public void set(int x, int y, int value) {
-    if (isValidValue(value)) {
+    if (! isValidValue(value)) {
       throw new IllegalArgumentException("Cannot set value " + value + "!");
     }
-    if ((this.original[x][y] != UNKNOWN)) {
+    if ((this.original[x][y] != UNKNOWN && this.original[x][y] != value)) {
       throw new IllegalStateException("Cannot overwrite given values!");
     }
     this.data[x][y] = value;
