@@ -7,7 +7,7 @@ class Main {
   public static void main(String[] args) {
     Board board = null;
     try {
-      board = new Board(new File("data/sudoku/easy/001_initial.csv"));
+      board = new Board(new File("data/sudoku/medium/001_initial.csv"));
     } catch (FileNotFoundException | InvalidSudokuFileException e) {
       System.err.println("Sudoku file not found or not readable!");
       return;

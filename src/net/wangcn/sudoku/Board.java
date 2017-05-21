@@ -31,7 +31,7 @@ public class Board {
             this.data[x][y] = Integer.parseInt(value);
           } catch (NumberFormatException ex) {
             throw new InvalidSudokuFileException(
-                String.format("Could not understand %s in Sudoku file!", value));
+                    String.format("Could not understand %s in Sudoku file!", value));
           }
         }
         this.original[x][y] = this.data[x][y];
@@ -67,9 +67,31 @@ public class Board {
   Check that there are no double numbers per row, column or block.
    */
   public boolean isConsistent() {
-    // todo
+    int value = 1;
+
+    for (int x = 0; x < MAX; x++) {
+      int count = 0;
+      // check a column
+      for (int y = 0; y < MAX; y++) {
+        if (this.data[x][y] == value) {
+          count++;
+          if (count > 1) {
+            return false;
+          }
+        }
+//        if (this.get(x, y) != Board.UNKNOWN) {
+        // If it's already known then we don't do anything
+//          return false;
+//        }
+//        else if(this.Solver.updateCount){
+//        }
+      }
+    }
     return false;
   }
+
+
+
 
   /*
   Check that the puzzle has been solved correctly.
@@ -124,7 +146,6 @@ public class Board {
     }
     return out.toString();
   }
-
   public void disp() {
     System.out.println(this.toString());
   }
