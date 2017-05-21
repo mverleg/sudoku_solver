@@ -2,11 +2,10 @@ package net.wangcn.sudoku;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.IllegalFormatException;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Board {
+public class Board implements Cloneable {
   public static final int MAX = 9;
   public static final int UNKNOWN = -1;
   private final int[][] data = new int[MAX][MAX];
@@ -17,9 +16,10 @@ public class Board {
   }
 
   Board() {
-    // For testing
+    // For testing and cloning
     for (int x = 0; x < this.data.length; x++) {
       for (int y = 0; y < this.data[x].length; y++) {
+        this.original[x][y] = UNKNOWN;
         this.data[x][y] = UNKNOWN;
       }
     }
@@ -63,7 +63,7 @@ public class Board {
   }
 
   void setGiven(int x, int y, int value) {
-    // For testing
+    // For testing and cloning
     if (! isValidValue(value)) {
       throw new IllegalArgumentException("Cannot set value " + value + "!");
     }
@@ -119,7 +119,7 @@ public class Board {
           int count = 0;
           for (int xsub = xblock * sqrtMax; xsub < (xblock + 1) * sqrtMax; xsub++) {
             for (int ysub = yblock * sqrtMax; ysub < (yblock + 1) * sqrtMax; ysub++) {
-              System.out.printf("%d %d -> %d %d\n", xblock, yblock, xsub, ysub);
+//              System.out.printf("%d %d -> %d %d\n", xblock, yblock, xsub, ysub); //todo
               if (this.data[xsub][ysub] == val) {
                 count++;
               }
@@ -190,5 +190,20 @@ public class Board {
 
   public void disp() {
     System.out.println(this.toString());
+  }
+
+  @Override
+  public Board clone() {
+    Board board = new Board();
+    for (int x = 0; x < MAX; x++) {
+      for (int y = 0; y < MAX; y++) {
+        if (this.original[x][y] != UNKNOWN) {
+          board.setGiven(x, y, this.original[x][y]);
+        } else if (this.data[x][y] != UNKNOWN) {
+          board.set(x, y, this.data[x][y]);
+        }
+      }
+    }
+    return board;
   }
 }
