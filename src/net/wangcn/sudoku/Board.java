@@ -16,6 +16,15 @@ public class Board {
     this.load(initialStateFile);
   }
 
+  Board() {
+    // For testing
+    for (int x = 0; x < this.data.length; x++) {
+      for (int y = 0; y < this.data[x].length; y++) {
+        this.data[x][y] = UNKNOWN;
+      }
+    }
+  }
+
   /*
   Load a game from a file
    */
@@ -53,6 +62,15 @@ public class Board {
     return this.data[x][y];
   }
 
+  void setGiven(int x, int y, int value) {
+    // For testing
+    if (! isValidValue(value)) {
+      throw new IllegalArgumentException("Cannot set value " + value + "!");
+    }
+    this.data[x][y] = value;
+    this.original[x][y] = value;
+  }
+
   public void set(int x, int y, int value) {
     if (! isValidValue(value)) {
       throw new IllegalArgumentException("Cannot set value " + value + "!");
@@ -67,8 +85,53 @@ public class Board {
   Check that there are no double numbers per row, column or block.
    */
   public boolean isConsistent() {
-    // todo
-    return false;
+    // For each value...
+    final int sqrtMax = (int) Math.sqrt(MAX);
+    for (int k = 0; k < MAX; k++) {
+      final int val = k + 1;
+      // Check columns
+      for (int x = 0; x < MAX; x++) {
+        int count = 0;
+        for (int y = 0; y < MAX; y++) {
+          if (this.data[x][y] == val) {
+            count++;
+          }
+        }
+        if (count > 1) {
+          return false;
+        }
+      }
+      // Check rows
+      for (int y = 0; y < MAX; y++) {
+        int count = 0;
+        for (int x = 0; x < MAX; x++) {
+          if (this.data[x][y] == val) {
+            count++;
+          }
+        }
+        if (count > 1) {
+          return false;
+        }
+      }
+      // Check cell
+      for (int xblock = 0; xblock < sqrtMax; xblock++) {
+        for (int yblock = 0; yblock < sqrtMax; yblock++) {
+          int count = 0;
+          for (int xsub = xblock * sqrtMax; xsub < (xblock + 1) * sqrtMax; xsub++) {
+            for (int ysub = yblock * sqrtMax; ysub < (yblock + 1) * sqrtMax; ysub++) {
+              System.out.printf("%d %d -> %d %d\n", xblock, yblock, xsub, ysub);
+              if (this.data[xsub][ysub] == val) {
+                count++;
+              }
+            }
+          }
+          if (count > 1) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   /*
